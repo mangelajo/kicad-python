@@ -20,6 +20,15 @@ class TestPcbnewBoard(unittest.TestCase):
         self.assertIn('M1', refs)
         self.assertIn('M2', refs)
 
+    def test_get_module_by_reference(self):
+        self.board.add_module('M1')
+        m = self.board.get_module('M1')
+        self.assertEqual(m.reference, 'M1')
+
+    def test_get_module_raises_exception(self):
+        with self.assertRaises(exceptions.NotFoundException):
+            self.board.get_module('DO_NOT_EXIST')
+
     def test_track_segment_creation(self):
         self.board.add_track_segment((0, 0), (1, 1))
         self.board.add_track_segment((0, 0), (1, 1), layer='B.Cu')

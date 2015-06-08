@@ -25,6 +25,7 @@ from kicad.pcbnew import module
 from kicad.pcbnew.track import Track
 from kicad.pcbnew.via import Via
 from kicad import units
+from kicad import exceptions
 
 
 class Board(object):
@@ -78,6 +79,13 @@ class Board(object):
     def add_module(self, ref, pos=(0, 0)):
         """Create new module on the board"""
         return module.Module(ref, pos, board=self)
+
+    def get_module(self, ref):
+        """Get a module by reference"""
+        found_module = self._obj.FindModuleByReference(ref)
+        if found_module:
+            return module.Module.wrap(found_module)
+        raise exceptions.NotFoundException("module %s not found" % ref)
 
     @property
     def default_width(self, width=None):
